@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trading Journal — XAUUSD April 2025</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="container">
+  <div class="page-header">
+    <h1>Trading journal</h1>
+    <p>XAUUSD · April 2025 · Starting balance $4,950.00</p>
+  </div>
+
+  <div class="account-controls" id="accountControls"></div>
+  <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleExcelUpload(event)" />
+
+  <div class="metrics" id="metricsGrid"></div>
+
+  <div class="charts-row">
+    <div class="card">
+      <div class="card-title">Equity curve</div>
+      <div class="chart-wrap"><canvas id="equityChart" role="img" aria-label="Equity curve across trades">Equity curve across trades.</canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">P&amp;L per trade</div>
+      <div class="chart-wrap"><canvas id="pnlChart" role="img" aria-label="P&L per trade bar chart">P&L per trade.</canvas></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('log')">Trade log</button>
+    <button class="tab" onclick="switchTab('add')">Add trade</button>
+    <button class="tab" onclick="switchTab('stats')">Stats</button>
+    <button class="tab" onclick="switchTab('calendar')">Calendar</button>
+  </div>
+
+  <!-- Trade Log -->
+  <div id="logTab">
+    <div class="filters">
+      <span class="filter-label">Filter:</span>
+      <select id="filterSide" onchange="renderTable()">
+        <option value="all">All sides</option>
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+      </select>
+      <select id="filterResult" onchange="renderTable()">
+        <option value="all">All results</option>
+        <option value="win">Wins only</option>
+        <option value="loss">Losses only</option>
+      </select>
+    </div>
+    <div class="card" style="padding:0; overflow:hidden;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Side</th>
+              <th>Entry</th>
+              <th>Close</th>
+              <th>SL</th>
+              <th>Lot</th>
+              <th>RR</th>
+              <th>P&amp;L</th>
+              <th>Balance</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tradeBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Trade -->
+  <div id="addTab" style="display:none;">
+    <div class="card">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Pair</label>
+          <input type="text" id="f-pair" value="XAUUSD" />
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="f-date" />
+        </div>
+        <div class="form-group">
+          <label>Side</label>
+          <select id="f-side">
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Entry price</label>
+          <input type="number" id="f-entry" step="0.001" placeholder="e.g. 3200.000" />
+        </div>
+        <div class="form-group">
+          <label>Close price</label>
+          <input type="number" id="f-close" step="0.001" placeholder="e.g. 3215.000" />
+        </div>
+        <div class="form-group">
+          <label>Stop loss</label>
+          <input type="number" id="f-sl" step="0.001" placeholder="e.g. 3190.000" />
+        </div>
+        <div class="form-group">
+          <label>Realized P&amp;L ($)</label>
+          <input type="number" id="f-pnl" step="0.01" placeholder="e.g. 45.20" />
+        </div>
+        <div class="form-group">
+          <label>Lot size</label>
+          <input type="number" id="f-lot" step="0.01" placeholder="e.g. 5.00" />
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" id="f-notes" placeholder="Optional" />
+        </div>
+      </div>
+      <button class="submit-btn" onclick="addTrade()">Add trade</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div id="statsTab" style="display:none;">
+    <div class="card" id="statsContent" style="font-size:13px; line-height:2;"></div>
+  </div>
+
+  <div id="calendarTab" style="display:none;">
+    <div class="card calendar-wrapper">
+      <div id="calendarContainer"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
